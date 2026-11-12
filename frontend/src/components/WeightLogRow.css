@@ -1,0 +1,22 @@
+.weight-log-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: calc(var(--default-spacing) / 3);
+}
+
+.weight-log-editing td {
+  vertical-align: top;
+}
+
+.weight-log-editing td:not(:last-child) {
+  padding-right: calc(var(--default-spacing) / 2);
+}
+
+.weight-log-editing input {
+  padding: calc(var(--default-spacing) / 2);
+}
+
+.weight-log-editing .error-text {
+  margin: calc(var(--default-spacing) / 3) 0 0;
+  font-size: 12px;
+}

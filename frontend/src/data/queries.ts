@@ -198,6 +198,17 @@ export function useAddWeight() {
   });
 }
 
+export function useUpdateWeight() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, weightKg, loggedAt }: { id: string; weightKg: number; loggedAt: Date }) =>
+      pb
+        .collection("weight_logs")
+        .update<WeightLog>(id, { weight_kg: weightKg, logged_at: loggedAt.toISOString() }, noAutoCancel),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["weight"] }),
+  });
+}
+
 export function useDeleteWeight() {
   const queryClient = useQueryClient();
   return useMutation({

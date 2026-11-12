@@ -1,8 +1,10 @@
 import { useState, type FormEvent } from "react";
 import DailyBarChart, { type DailyBar } from "../components/DailyBarChart";
 import WeightChart from "../components/WeightChart";
-import { useAddWeight, useDeleteWeight, useEntriesRange, useWeightLogs } from "../data/queries";
+import WeightLogRow from "../components/WeightLogRow";
+import { useAddWeight, useEntriesRange, useWeightLogs } from "../data/queries";
 import { errorMessage, goalsFor } from "../helpers/pocketbase";
+import { parseWeightKg } from "../helpers/weight";
 import { useAuth } from "../helpers/useAuth";
 import { addDays, dayKey, formatShortDate, parsePbDate, startOfDay } from "../helpers/dates";
 import "./ProgressPage.css";
@@ -17,7 +19,6 @@ export default function ProgressPage() {
   const { data: entries = [], isPending } = useEntriesRange(days);
   const { data: weightLogs = [] } = useWeightLogs();
   const addWeight = useAddWeight();
-  const deleteWeight = useDeleteWeight();
   const [weight, setWeight] = useState("");
   const [weightError, setWeightError] = useState("");
 
@@ -43,8 +44,8 @@ export default function ProgressPage() {
   async function handleAddWeight(e: FormEvent) {
     e.preventDefault();
     setWeightError("");
-    const value = Number(weight.replace(",", "."));
-    if (!value || value <= 0) {
+    const value = parseWeightKg(weight);
+    if (value === null) {
       setWeightError("Enter your weight in kg.");
       return;
     }
@@ -127,20 +128,7 @@ export default function ProgressPage() {
               </thead>
               <tbody>
                 {[...weightLogs].reverse().map((log) => (
-                  <tr key={log.id}>
-                    <td>{formatShortDate(parsePbDate(log.logged_at))}</td>
-                    <td>{log.weight_kg} kg</td>
-                    <td>
-                      <button
-                        type="button"
-                        className="icon"
-                        aria-label="Delete weight entry"
-                        onClick={() => deleteWeight.mutate(log.id)}
-                      >
-                        ✕
-                      </button>
-                    </td>
-                  </tr>
+                  <WeightLogRow key={log.id} log={log} />
                 ))}
               </tbody>
             </table>
