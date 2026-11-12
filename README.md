@@ -9,11 +9,15 @@ This is a project I made thanks to Claude Code. It tracks macro and micro nutrie
 - Macronutrient tracking (fats, carbs, protein)
 - Vitamin tracking
 - Food recognition by Claude
-- Wdight tracking
+- Weight tracking
 
 ## Self hosting
 ### Requirements
 You will need Docker, npm to build the app, and a Claude API key (https://platform.claude.com/dashboard).
 5 dollars is good to start on and will give you thousands of requests for now.
+
+Set up the backend before continuing to the frontend. There is an instructions file in the pocketbase folder.
+
+Fill in the pocketbase URL folder in the frontend folder.
 
 In order to build the app, you can use `npm install`, and `npm run build` afterwards. This will create a dist folder with static files, which you can then run on nginx or any webserver of your liking.
