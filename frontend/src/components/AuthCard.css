@@ -1,0 +1,22 @@
+.auth-card-wrapper {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: calc(var(--default-spacing) * 2) var(--default-spacing);
+}
+
+.auth-card {
+  width: min(100%, 384px);
+  display: grid;
+  gap: calc(var(--default-spacing) * 2);
+}
+
+.auth-card h1 {
+  text-align: center;
+}
+
+.auth-card-title {
+  margin: 0;
+  text-align: center;
+  color: var(--text-muted);
+}

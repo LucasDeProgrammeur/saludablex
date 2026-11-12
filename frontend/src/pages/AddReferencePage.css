@@ -1,0 +1,49 @@
+.add-reference-intro {
+  display: grid;
+  gap: calc(var(--default-spacing) / 2);
+  max-width: 60ch;
+}
+
+.add-reference-name {
+  width: min(100%, 720px);
+  margin-bottom: calc(var(--default-spacing) * 2);
+}
+
+.add-reference-intro p {
+  font-size: 14px;
+}
+
+/* Photo and form side by side on wide screens, stacked on phones */
+.add-reference-review {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--default-spacing) * 2);
+  align-items: flex-start;
+}
+
+.add-reference-photo {
+  flex: 1 1 min(100%, 360px);
+}
+
+.add-reference-form {
+  flex: 1 1 min(100%, 420px);
+}
+
+.add-reference-fields {
+  display: grid;
+  gap: var(--default-spacing);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.add-reference-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 120px), 1fr));
+  gap: var(--default-spacing);
+}
+
+.add-reference-heading {
+  margin: calc(var(--default-spacing) / 2) 0 0;
+}

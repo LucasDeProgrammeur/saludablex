@@ -1,0 +1,79 @@
+.calorie-summary {
+  display: grid;
+  justify-items: center;
+  gap: var(--default-spacing);
+}
+
+.calorie-summary-ring {
+  position: relative;
+  width: min(60vw, 216px);
+  aspect-ratio: 1;
+}
+
+.calorie-summary-ring svg {
+  width: 100%;
+  height: 100%;
+  rotate: -90deg;
+}
+
+.calorie-summary-track {
+  fill: none;
+  stroke: var(--track);
+}
+
+.calorie-summary-progress {
+  fill: none;
+  stroke: url(#calorie-ring-gradient);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--main-color) 60%, transparent));
+}
+
+.calorie-summary.is-over .calorie-summary-progress {
+  stroke: var(--color-warning);
+  filter: none;
+}
+
+.calorie-summary-center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.calorie-summary-eaten {
+  font-size: min(12vw, 48px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.calorie-summary-goal {
+  margin-top: calc(var(--default-spacing) / 3);
+  font-size: 15px;
+  color: var(--text-muted);
+}
+
+.calorie-summary-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.calorie-summary-remaining {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.calorie-summary-remaining strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.calorie-summary.is-over .calorie-summary-remaining strong {
+  color: var(--color-warning);
+}

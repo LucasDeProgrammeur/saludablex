@@ -1,0 +1,44 @@
+.reference-picker {
+  position: relative;
+}
+
+.reference-picker-list {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + var(--default-spacing) / 3);
+  left: 0;
+  right: 0;
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 0;
+  padding: calc(var(--default-spacing) / 3);
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--default-radius) * 0.75);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow);
+}
+
+.reference-picker-option {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: calc(var(--default-spacing) / 3) var(--default-spacing);
+  padding: calc(var(--default-spacing) * 0.75) var(--default-spacing);
+  border-radius: calc(var(--default-radius) / 2);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.reference-picker-option.is-active {
+  background: color-mix(in srgb, var(--main-color) 22%, transparent);
+}
+
+.reference-picker-kcal {
+  font-size: 12px;
+}
+
+.reference-picker-empty {
+  padding: calc(var(--default-spacing) * 0.75) var(--default-spacing);
+  font-size: 13px;
+}

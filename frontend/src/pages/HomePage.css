@@ -1,0 +1,45 @@
+.home-greeting {
+  font-size: 13px;
+  margin-bottom: calc(var(--default-spacing) / 3);
+}
+
+.home-day-switch {
+  display: flex;
+  gap: calc(var(--default-spacing) / 2);
+}
+
+.home-day-switch button {
+  min-width: 42px;
+  padding-inline: var(--default-spacing);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.home-overview {
+  display: grid;
+  gap: calc(var(--default-spacing) * 2.5);
+}
+
+.home-macros {
+  display: grid;
+  gap: calc(var(--default-spacing) * 1.5);
+}
+
+/* Micronutrients: one column on phones, two side by side when there's room */
+.home-micros {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr));
+  gap: calc(var(--default-spacing) * 1.5) calc(var(--default-spacing) * 2);
+}
+
+.home-meals-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--default-spacing);
+  margin-bottom: calc(var(--default-spacing) * 1.5);
+}
+
+.home-meals-header h2 {
+  margin: 0;
+}

@@ -1,0 +1,29 @@
+.weight-chart {
+  margin: 0;
+  display: grid;
+  gap: calc(var(--default-spacing) / 2);
+}
+
+.weight-chart-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--default-spacing);
+  font-size: 14px;
+}
+
+.weight-chart-readout {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.weight-chart-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  border-bottom: 1px solid var(--border);
+}
+
+.weight-chart-svg circle:focus {
+  outline: none;
+}

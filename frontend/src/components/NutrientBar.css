@@ -1,0 +1,116 @@
+.nutrient-bar {
+  display: grid;
+  gap: calc(var(--default-spacing) * 0.75);
+}
+
+.nutrient-bar-header {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: baseline;
+  gap: var(--default-spacing);
+  font-size: 15px;
+}
+
+.nutrient-bar-amount {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.nutrient-bar-amount strong {
+  font-weight: 600;
+}
+
+.nutrient-bar-goal-text {
+  color: var(--text-muted);
+}
+
+.nutrient-bar-adding {
+  color: var(--secondary-color);
+  font-weight: 600;
+}
+
+.nutrient-bar-percent {
+  min-width: 4ch;
+  text-align: right;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.nutrient-bar-track {
+  position: relative;
+  display: flex;
+  gap: 2px;
+  height: 12px;
+  padding: 2px;
+  border-radius: 999px;
+  background: var(--track);
+  overflow: hidden;
+}
+
+.nutrient-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--main-color), color-mix(in srgb, var(--main-color) 60%, var(--secondary-color)));
+  box-shadow: 0 0 9px color-mix(in srgb, var(--main-color) 55%, transparent);
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: nutrient-bar-grow 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: left;
+}
+
+/* The pending meal: lighter and striped so it's distinguishable without color */
+.nutrient-bar-fill.is-adding {
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--secondary-color) 0 6px,
+    color-mix(in srgb, var(--secondary-color) 65%, transparent) 6px 9px
+  );
+  box-shadow: none;
+}
+
+@keyframes nutrient-bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+/* Marks the goal once the bar is past it */
+.nutrient-bar-goal {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--text);
+}
+
+.nutrient-bar.is-over .nutrient-bar-percent {
+  color: var(--secondary-color);
+}
+
+.nutrient-bar.is-over-limit .nutrient-bar-percent,
+.nutrient-bar.is-over-limit .nutrient-bar-amount strong {
+  color: var(--color-warning);
+}
+
+.nutrient-bar.is-over-limit .nutrient-bar-fill:not(.is-adding) {
+  background: var(--color-warning);
+  box-shadow: none;
+}
+
+/* Compact variant for the micronutrient list */
+.nutrient-bar.is-compact {
+  gap: calc(var(--default-spacing) / 2);
+}
+
+.nutrient-bar.is-compact .nutrient-bar-header {
+  font-size: 13px;
+}
+
+.nutrient-bar.is-compact .nutrient-bar-track {
+  height: 6px;
+  padding: 0;
+}
+
+.nutrient-bar.is-compact .nutrient-bar-fill {
+  box-shadow: none;
+}

@@ -1,0 +1,115 @@
+/* ---------- Preview ---------- */
+/* Photo and controls side by side on wide screens (photo ~2/3), stacked on phones */
+.add-food-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--default-spacing) * 2);
+  align-items: flex-start;
+}
+
+.add-food-preview-photo {
+  flex: 2 1 min(100%, 450px);
+}
+
+.add-food-preview-side {
+  flex: 1 1 min(100%, 300px);
+  display: grid;
+  gap: calc(var(--default-spacing) * 1.5);
+}
+
+.add-food-preview-actions {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--default-spacing);
+}
+
+.add-food-manual-link {
+  justify-self: center;
+  font-size: 13px;
+  font-weight: 400;
+  text-decoration: underline;
+}
+
+/* ---------- Review ---------- */
+.add-food-summary {
+  display: grid;
+  gap: calc(var(--default-spacing) * 1.5);
+}
+
+/* Only keep the summary in view when it sits next to the item list.
+   (240px sidebar + padding + two 420px columns ≈ 1180px.) When stacked on
+   smaller screens, sticky would make it cover the items while scrolling. */
+@media (min-width: 1180px) {
+  .add-food-summary {
+    position: sticky;
+    top: calc(var(--default-spacing) * 2);
+  }
+}
+
+.add-food-notes {
+  font-size: 13px;
+}
+
+.add-food-impact {
+  display: grid;
+  gap: calc(var(--default-spacing) * 1.5);
+}
+
+.add-food-impact h2 {
+  margin: 0;
+  font-weight: 400;
+}
+
+.add-food-impact strong {
+  font-weight: 600;
+}
+
+.add-food-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: calc(var(--default-spacing) / 2);
+  font-size: 12px;
+}
+
+.add-food-legend-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: var(--main-color);
+}
+
+.add-food-legend-swatch.is-adding {
+  margin-left: var(--default-spacing);
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--secondary-color) 0 3px,
+    color-mix(in srgb, var(--secondary-color) 65%, transparent) 3px 5px
+  );
+}
+
+.add-food-items {
+  display: grid;
+  gap: calc(var(--default-spacing) * 1.5);
+}
+
+.add-food-items h2 {
+  margin: 0;
+}
+
+.add-food-save {
+  padding-block: var(--default-spacing);
+  font-size: 16px;
+}
+
+/* Label search + manual "add item" side by side, stacked on narrow screens */
+.add-food-add-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--default-spacing);
+}
+
+.add-food-add-row .reference-picker {
+  flex: 1 1 min(100%, 240px);
+}

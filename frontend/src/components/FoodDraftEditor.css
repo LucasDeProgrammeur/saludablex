@@ -1,0 +1,39 @@
+.food-draft {
+  display: grid;
+  gap: var(--default-spacing);
+  margin: 0;
+  padding: calc(var(--default-spacing) * 1.5);
+  border: 1px solid var(--border);
+  border-radius: var(--default-radius);
+  background: var(--surface-raised);
+}
+
+.food-draft input {
+  background: var(--surface);
+}
+
+.food-draft-header {
+  display: flex;
+  gap: calc(var(--default-spacing) / 2);
+}
+
+.food-draft-name {
+  font-size: 16px;
+}
+
+.food-draft-warning {
+  font-size: 13px;
+  color: var(--color-warning);
+}
+
+.food-draft-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 120px), 1fr));
+  gap: var(--default-spacing);
+}
+
+.food-draft-toggle {
+  justify-self: start;
+  padding: calc(var(--default-spacing) / 3) var(--default-spacing);
+  font-size: 13px;
+}

@@ -1,0 +1,127 @@
+/* ---------- Phones: bottom tab bar ---------- */
+.main-nav {
+  position: fixed;
+  z-index: 10;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr auto 1fr 1fr;
+  align-items: center;
+  gap: calc(var(--default-spacing) / 2);
+  padding: calc(var(--default-spacing) / 2) var(--default-spacing);
+  padding-bottom: max(calc(var(--default-spacing) / 2), env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border);
+}
+
+/* Order on phones: Today, Progress, [camera], References, Settings */
+.main-nav-brand {
+  display: none;
+}
+
+.main-nav-link {
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  padding: calc(var(--default-spacing) / 2);
+  border-radius: calc(var(--default-radius) * 0.75);
+  font-size: 12px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease;
+}
+
+.main-nav-link:hover,
+.main-nav-link.active {
+  color: var(--text);
+}
+
+.main-nav-add {
+  display: grid;
+  place-items: center;
+  width: 57px;
+  height: 57px;
+  margin-top: calc(var(--default-spacing) * -2.5);
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--secondary-color), var(--main-color));
+  color: #fff;
+  text-decoration: none;
+  box-shadow:
+    0 6px 18px color-mix(in srgb, var(--main-color) 45%, transparent),
+    0 0 0 6px var(--background);
+}
+
+.main-nav-add-label {
+  display: none;
+}
+
+/* ---------- Wide screens: sidebar ---------- */
+@media (min-width: 900px) {
+  .main-nav {
+    position: sticky;
+    top: 0;
+    bottom: auto;
+    height: 100dvh;
+    width: 240px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: calc(var(--default-spacing) / 3);
+    padding: calc(var(--default-spacing) * 2) var(--default-spacing);
+    border-top: 0;
+    border-right: 1px solid var(--border);
+  }
+
+  .main-nav-brand {
+    display: block;
+    padding: 0 var(--default-spacing) calc(var(--default-spacing) * 2);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .main-nav-link {
+    grid-template-columns: auto 1fr;
+    justify-items: start;
+    align-items: center;
+    gap: var(--default-spacing);
+    padding: calc(var(--default-spacing) * 0.75) var(--default-spacing);
+    font-size: 15px;
+  }
+
+  .main-nav-link:hover {
+    background: var(--surface-raised);
+  }
+
+  .main-nav-link.active {
+    background: color-mix(in srgb, var(--main-color) 22%, transparent);
+  }
+
+  /* Add food becomes a full-width button at the top of the list */
+  .main-nav-add {
+    order: -1;
+    display: flex;
+    justify-content: center;
+    gap: calc(var(--default-spacing) * 0.75);
+    width: auto;
+    height: auto;
+    margin: 0 0 calc(var(--default-spacing) * 1.5);
+    padding: calc(var(--default-spacing) * 0.75);
+    border-radius: calc(var(--default-radius) * 0.75);
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--main-color) 35%, transparent);
+    font-weight: 500;
+  }
+
+  .main-nav-brand {
+    order: -2;
+  }
+
+  .main-nav-add-label {
+    display: inline;
+  }
+}

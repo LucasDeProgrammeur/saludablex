@@ -1,0 +1,21 @@
+.app-shell {
+  min-height: 100dvh;
+  display: flex;
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+  width: min(100%, var(--content-width));
+  margin-inline: auto;
+  padding: calc(var(--default-spacing) * 2) min(4vw, calc(var(--default-spacing) * 3));
+  /* room for the bottom nav on phones */
+  padding-bottom: calc(var(--default-spacing) * 9);
+}
+
+/* Wide screens: sidebar on the left (MainNav.css), no bottom padding needed */
+@media (min-width: 900px) {
+  .app-main {
+    padding: calc(var(--default-spacing) * 3);
+  }
+}
