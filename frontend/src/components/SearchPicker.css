@@ -1,8 +1,8 @@
-.reference-picker {
+.search-picker {
   position: relative;
 }
 
-.reference-picker-list {
+.search-picker-list {
   position: absolute;
   z-index: 5;
   top: calc(100% + var(--default-spacing) / 3);
@@ -19,7 +19,7 @@
   box-shadow: var(--shadow);
 }
 
-.reference-picker-option {
+.search-picker-option {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -30,15 +30,16 @@
   cursor: pointer;
 }
 
-.reference-picker-option.is-active {
+.search-picker-option.is-active {
   background: color-mix(in srgb, var(--main-color) 22%, transparent);
 }
 
-.reference-picker-kcal {
+/* Secondary text on the right of an option, e.g. calories */
+.search-picker-meta {
   font-size: 12px;
 }
 
-.reference-picker-empty {
+.search-picker-empty {
   padding: calc(var(--default-spacing) * 0.75) var(--default-spacing);
   font-size: 13px;
 }

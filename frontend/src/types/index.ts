@@ -105,3 +105,24 @@ export interface LabelResult extends Omit<ReferenceDraft, "micros" | "name"> {
   recognized: boolean;
   micros: Partial<Record<MicroKey, number | null>>;
 }
+
+/** A frequently eaten meal that can be logged in one go */
+export interface Recipe extends RecordModel {
+  user: string;
+  name: string;
+  photo: string;
+}
+
+/** One food item of a recipe, stored in recipe_food_items */
+export interface RecipeFoodItem extends RecordModel, Nutrition {
+  recipe: string;
+  sort: number;
+  name: string;
+  portion: string;
+  grams: number;
+}
+
+/** A recipe with its food items (ordered by `sort`) */
+export interface RecipeWithItems extends Recipe {
+  items: RecipeFoodItem[];
+}

@@ -6,7 +6,7 @@
   left: 0;
   right: 0;
   display: grid;
-  grid-template-columns: 1fr 1fr auto 1fr 1fr;
+  grid-template-columns: 1fr 1fr auto 1fr 1fr 1fr;
   align-items: center;
   gap: calc(var(--default-spacing) / 2);
   padding: calc(var(--default-spacing) / 2) var(--default-spacing);
@@ -16,7 +16,7 @@
   border-top: 1px solid var(--border);
 }
 
-/* Order on phones: Today, Progress, [camera], References, Settings */
+/* Order on phones: Today, Progress, [camera], Recipes, References, Settings */
 .main-nav-brand {
   display: none;
 }
@@ -25,14 +25,23 @@
   display: grid;
   justify-items: center;
   gap: 3px;
-  padding: calc(var(--default-spacing) / 2);
+  min-width: 0;
+  padding: calc(var(--default-spacing) / 2) 0;
   border-radius: calc(var(--default-radius) * 0.75);
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-muted);
   text-decoration: none;
   transition:
     color 0.15s ease,
     background 0.15s ease;
+}
+
+/* Six items share a phone's width; never let a long label push the bar wider */
+.main-nav-link span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .main-nav-link:hover,

@@ -7,6 +7,9 @@ import type {
   FoodEntry,
   FoodReference,
   LabelResult,
+  Recipe,
+  RecipeFoodItem,
+  RecipeWithItems,
   ReferenceDraft,
   WeightLog,
 } from "../types";
@@ -170,6 +173,100 @@ export function useDeleteReference() {
   return useMutation({
     mutationFn: (id: string) => pb.collection("food_references").delete(id, noAutoCancel),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["references"] }),
+  });
+}
+
+// ---------- recipes ----------
+
+/** All of the user's recipes with their items; small enough to search client-side. */
+export function useRecipes() {
+  return useQuery({
+    queryKey: ["recipes"],
+    queryFn: async (): Promise<RecipeWithItems[]> => {
+      const [recipes, items] = await Promise.all([
+        pb.collection("recipes").getFullList<Recipe>({ sort: "name", ...noAutoCancel }),
+        pb.collection("recipe_food_items").getFullList<RecipeFoodItem>({ sort: "sort", ...noAutoCancel }),
+      ]);
+      const byRecipe = new Map<string, RecipeFoodItem[]>();
+      for (const item of items) {
+        byRecipe.set(item.recipe, [...(byRecipe.get(item.recipe) ?? []), item]);
+      }
+      return recipes.map((recipe) => ({ ...recipe, items: byRecipe.get(recipe.id) ?? [] }));
+    },
+  });
+}
+
+async function createRecipeItems(recipeId: string, drafts: FoodDraft[]) {
+  // Sequential on purpose: keeps request count gentle on a small server.
+  for (const [sort, draft] of drafts.entries()) {
+    await pb.collection("recipe_food_items").create(
+      {
+        recipe: recipeId,
+        sort,
+        name: draft.name,
+        portion: draft.portion,
+        grams: draft.grams,
+        calories: draft.calories,
+        carbs: draft.carbs,
+        fat: draft.fat,
+        protein: draft.protein,
+        micros: draft.micros,
+      },
+      noAutoCancel,
+    );
+  }
+}
+
+/** Creates a recipe, or (with `id`) renames it and replaces all of its items. */
+export function useSaveRecipe() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      name,
+      drafts,
+      photo,
+    }: {
+      id?: string;
+      name: string;
+      drafts: FoodDraft[];
+      photo?: Blob;
+    }): Promise<Recipe> => {
+      const photoField = photo ? { photo: new File([photo], "recipe.jpg", { type: photo.type }) } : {};
+
+      if (id) {
+        const recipe = await pb.collection("recipes").update<Recipe>(id, { name, ...photoField }, noAutoCancel);
+        const old = await pb
+          .collection("recipe_food_items")
+          .getFullList<RecipeFoodItem>({ filter: pb.filter("recipe = {:id}", { id }), ...noAutoCancel });
+        for (const item of old) {
+          await pb.collection("recipe_food_items").delete(item.id, noAutoCancel);
+        }
+        await createRecipeItems(id, drafts);
+        return recipe;
+      }
+
+      const recipe = await pb
+        .collection("recipes")
+        .create<Recipe>({ user: requireUserId(), name, ...photoField }, noAutoCancel);
+      try {
+        await createRecipeItems(recipe.id, drafts);
+      } catch (err) {
+        // Don't leave a half-filled recipe behind (its items are cascade-deleted)
+        await pb.collection("recipes").delete(recipe.id, noAutoCancel).catch(() => {});
+        throw err;
+      }
+      return recipe;
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["recipes"] }),
+  });
+}
+
+export function useDeleteRecipe() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => pb.collection("recipes").delete(id, noAutoCancel),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["recipes"] }),
   });
 }
 

@@ -2,7 +2,7 @@ import { MICROS } from "../data/nutrients";
 import { scaleNutrition } from "./nutrition";
 import type { FoodDraft, FoodReference, LabelResult, Micros, ReferenceDraft } from "../types";
 
-function normalize(text: string): string {
+export function normalize(text: string): string {
   return text
     .toLowerCase()
     .normalize("NFD")

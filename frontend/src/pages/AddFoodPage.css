@@ -110,6 +110,42 @@
   gap: var(--default-spacing);
 }
 
-.add-food-add-row .reference-picker {
+.add-food-add-row .search-picker {
   flex: 1 1 min(100%, 240px);
+}
+
+.add-food-recipe-start {
+  width: min(100%, 420px);
+  text-align: left;
+}
+
+/* ---------- Save as recipe ---------- */
+.add-food-recipe-option {
+  display: grid;
+  gap: var(--default-spacing);
+  padding: calc(var(--default-spacing) * 1.5);
+  border: 1px solid var(--border);
+  border-radius: var(--default-radius);
+}
+
+.add-food-checkbox {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--default-spacing) * 0.75);
+  font-size: 15px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.add-food-checkbox input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--main-color);
+}
+
+.add-food-recipe-saved {
+  margin: 0;
+  font-size: 13px;
 }

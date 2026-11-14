@@ -1,0 +1,32 @@
+.recipe-editor-layout {
+  display: grid;
+  gap: calc(var(--default-spacing) * 1.5);
+  width: min(100%, 720px);
+}
+
+.recipe-editor-total {
+  margin: 0;
+  font-size: 14px;
+}
+
+.recipe-editor-total strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Label search + manual "add item" side by side, stacked on narrow screens */
+.recipe-editor-add-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--default-spacing);
+}
+
+.recipe-editor-add-row .search-picker {
+  flex: 1 1 min(100%, 240px);
+}
+
+.recipe-editor-save {
+  padding-block: var(--default-spacing);
+  font-size: 16px;
+}

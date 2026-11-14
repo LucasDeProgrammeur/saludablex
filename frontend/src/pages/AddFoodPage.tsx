@@ -6,7 +6,8 @@ import FoodDraftEditor from "../components/FoodDraftEditor";
 import NutrientBar from "../components/NutrientBar";
 import ReferenceChips from "../components/ReferenceChips";
 import ReferencePicker from "../components/ReferencePicker";
-import { useAddEntries, useAnalyzeFood, useEntriesForDay } from "../data/queries";
+import RecipePicker from "../components/RecipePicker";
+import { useAddEntries, useAnalyzeFood, useEntriesForDay, useSaveRecipe } from "../data/queries";
 import { MACROS } from "../data/nutrients";
 import type { PreparedImage } from "../helpers/image";
 import { usePreparedImage } from "../helpers/usePreparedImage";
@@ -15,19 +16,10 @@ import { useAuth } from "../helpers/useAuth";
 import { sumNutrition } from "../helpers/nutrition";
 import { toLocalInputValue } from "../helpers/dates";
 import { referenceToFoodDraft } from "../helpers/references";
-import type { AnalyzedItem, FoodDraft, FoodReference } from "../types";
+import { analyzedToDraft, emptyDraft, newDraftKey } from "../helpers/drafts";
+import { recipeToFoodDrafts } from "../helpers/recipes";
+import type { FoodDraft, FoodReference, RecipeWithItems } from "../types";
 import "./AddFoodPage.css";
-
-let draftCounter = 0;
-const newKey = () => `draft-${++draftCounter}`;
-
-function toDraft(item: AnalyzedItem): FoodDraft {
-  return { ...item, key: newKey() };
-}
-
-function emptyDraft(): FoodDraft {
-  return { key: newKey(), name: "", portion: "", grams: 100, calories: 0, carbs: 0, fat: 0, protein: 0, micros: {} };
-}
 
 /** capture → preview (confirm photo, optional note) → review (edit + save) */
 type Step = "capture" | "preview" | "review";
@@ -45,9 +37,14 @@ export default function AddFoodPage() {
   const [notes, setNotes] = useState("");
   const [eatenAt, setEatenAt] = useState(() => toLocalInputValue(new Date()));
   const [error, setError] = useState("");
+  const [saveAsRecipe, setSaveAsRecipe] = useState(false);
+  const [recipeName, setRecipeName] = useState("");
+  // Set once the recipe is created, so retrying a failed meal save doesn't create it twice
+  const [savedRecipeId, setSavedRecipeId] = useState<string | null>(null);
 
   const analyze = useAnalyzeFood();
   const addEntries = useAddEntries();
+  const saveRecipe = useSaveRecipe();
   const { data: todayEntries = [] } = useEntriesForDay(new Date());
 
   function handlePhoto(photo: PreparedImage) {
@@ -73,7 +70,7 @@ export default function AddFoodPage() {
         setError("No food recognised in this photo. Try another photo, add a note, or add it manually.");
         return;
       }
-      setDrafts(result.items.map(toDraft));
+      setDrafts(result.items.map(analyzedToDraft));
       setNotes(result.notes);
       setStep("review");
     } catch (err) {
@@ -96,6 +93,14 @@ export default function AddFoodPage() {
     setStep("review");
   }
 
+  function startFromRecipe(recipe: RecipeWithItems) {
+    setImage(null);
+    setDrafts(recipeToFoodDrafts(recipe));
+    setNotes("");
+    setError("");
+    setStep("review");
+  }
+
   async function handleSave() {
     setError("");
     const valid = drafts.filter((d) => d.name.trim());
@@ -103,7 +108,15 @@ export default function AddFoodPage() {
       setError("Add at least one food item with a name.");
       return;
     }
+    if (saveAsRecipe && !recipeName.trim()) {
+      setError("Give the recipe a name, or untick “Also save as a recipe”.");
+      return;
+    }
     try {
+      if (saveAsRecipe && !savedRecipeId) {
+        const recipe = await saveRecipe.mutateAsync({ name: recipeName.trim(), drafts: valid, photo: image?.blob });
+        setSavedRecipeId(recipe.id);
+      }
       await addEntries.mutateAsync({ drafts: valid, eatenAt: new Date(eatenAt), photo: image?.blob });
       navigate("/");
     } catch (err) {
@@ -134,6 +147,9 @@ export default function AddFoodPage() {
           <button type="button" className="secondary" onClick={startManual}>
             Add manually without a photo
           </button>
+          <div className="add-food-recipe-start">
+            <RecipePicker label="Or log one of your recipes" onSelect={startFromRecipe} />
+          </div>
         </PhotoCapture>
       )}
 
@@ -235,7 +251,11 @@ export default function AddFoodPage() {
             <div className="add-food-add-row">
               <ReferencePicker
                 label="Add a packaged product"
-                onSelect={(reference) => setDrafts((all) => [...all, referenceToFoodDraft(reference, newKey())])}
+                onSelect={(reference) => setDrafts((all) => [...all, referenceToFoodDraft(reference, newDraftKey())])}
+              />
+              <RecipePicker
+                label="Add a recipe"
+                onSelect={(recipe) => setDrafts((all) => [...all, ...recipeToFoodDrafts(recipe)])}
               />
               <button type="button" className="secondary" onClick={() => setDrafts((all) => [...all, emptyDraft()])}>
                 + Add item
@@ -247,14 +267,39 @@ export default function AddFoodPage() {
               <input type="datetime-local" value={eatenAt} onChange={(e) => setEatenAt(e.target.value)} />
             </label>
 
+            <div className="add-food-recipe-option">
+              <label className="add-food-checkbox">
+                <input
+                  type="checkbox"
+                  checked={saveAsRecipe}
+                  disabled={savedRecipeId !== null}
+                  onChange={(e) => setSaveAsRecipe(e.target.checked)}
+                />
+                Also save as a recipe
+              </label>
+              {saveAsRecipe && (
+                <label>
+                  Recipe name
+                  <input
+                    value={recipeName}
+                    placeholder="e.g. Weekday breakfast"
+                    maxLength={200}
+                    disabled={savedRecipeId !== null}
+                    onChange={(e) => setRecipeName(e.target.value)}
+                  />
+                </label>
+              )}
+              {savedRecipeId && <p className="muted add-food-recipe-saved">Recipe saved.</p>}
+            </div>
+
             {error && <p className="error-text">{error}</p>}
             <button
               type="button"
               className="add-food-save"
               onClick={handleSave}
-              disabled={addEntries.isPending || drafts.length === 0}
+              disabled={addEntries.isPending || saveRecipe.isPending || drafts.length === 0}
             >
-              {addEntries.isPending ? "Saving…" : "Save meal"}
+              {addEntries.isPending || saveRecipe.isPending ? "Saving…" : "Save meal"}
             </button>
           </section>
         </div>

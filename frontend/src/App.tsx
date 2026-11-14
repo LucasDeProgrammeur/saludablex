@@ -9,6 +9,8 @@ import ProgressPage from "./pages/ProgressPage";
 import SettingsPage from "./pages/SettingsPage";
 import ReferencesPage from "./pages/ReferencesPage";
 import AddReferencePage from "./pages/AddReferencePage";
+import RecipesPage from "./pages/RecipesPage";
+import RecipeEditorPage from "./pages/RecipeEditorPage";
 
 export default function App() {
   return (
@@ -22,6 +24,9 @@ export default function App() {
             <Route index element={<HomePage />} />
             <Route path="add" element={<AddFoodPage />} />
             <Route path="progress" element={<ProgressPage />} />
+            <Route path="recipes" element={<RecipesPage />} />
+            <Route path="recipes/new" element={<RecipeEditorPage />} />
+            <Route path="recipes/:id" element={<RecipeEditorPage />} />
             <Route path="references" element={<ReferencesPage />} />
             <Route path="references/add" element={<AddReferencePage />} />
             <Route path="settings" element={<SettingsPage />} />

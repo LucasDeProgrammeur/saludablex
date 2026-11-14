@@ -4,6 +4,7 @@ import "./MainNav.css";
 const icons = {
   today: "M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z",
   progress: "M4 20V10m6 10V4m6 16v-7m6 7H2",
+  recipes: "M6 3.5h11.5A1.5 1.5 0 0 1 19 5v15.5H6.5A1.5 1.5 0 0 1 5 19V5a1.5 1.5 0 0 1 1-1.5zM5 17.5h14M9 8h6M9 11.5h4",
   labels: "M3.5 12.6V5a1.5 1.5 0 0 1 1.5-1.5h7.6a1.5 1.5 0 0 1 1 .44l7 7a1.5 1.5 0 0 1 0 2.12l-7.6 7.6a1.5 1.5 0 0 1-2.12 0l-7-7a1.5 1.5 0 0 1-.38-1.06zM8.5 9.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z",
   settings: "M4 7h8m4 0h4M14 4.5v5M4 17h4m4 0h8M10 14.5v5",
   camera:
@@ -35,6 +36,10 @@ export default function MainNav() {
       <NavLink to="/add" className="main-nav-add">
         <Icon path={icons.camera} />
         <span className="main-nav-add-label">Add food</span>
+      </NavLink>
+      <NavLink to="/recipes" className="main-nav-link">
+        <Icon path={icons.recipes} />
+        <span>Recipes</span>
       </NavLink>
       <NavLink to="/references" className="main-nav-link">
         <Icon path={icons.labels} />
